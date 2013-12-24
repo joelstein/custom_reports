@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * Implementation of hook_menu().
+ */
+function custom_reports_menu() {
+  $items['admin/reports/custom'] = array(
+    'title' => t('Custom reports'),
+    'description' => t('Download custom reports exposed by various modules on your site.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('custom_reports_list_form'),
+    'access arguments' => array('access site reports'),
+    'file' => 'custom_reports.admin.inc',
+  );
+  $items['admin/reports/custom/list'] = array(
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'title' => t('List'),
+  );
+  $items['admin/reports/custom/history'] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => t('History'),
+    'page callback' => 'custom_reports_history',
+    'access arguments' => array('access site reports'),
+    'file' => 'custom_reports.admin.inc',
+    'weight' => 1,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_file_download().
+ */
+function custom_reports_file_download($filepath) {
+  // Serve up reports to users with proper permission
+  if (file_check_location($filepath, file_create_path('custom_reports'))) {
+    if (user_access('access site reports')) {
+      return array(
+        'Content-Type: text/csv',
+        'Content-Length: ' . filesize($filepath),
+        'Content-Disposition: attachment; filename="' . basename($filepath) . '"',
+      );
+    } else {
+      return -1;
+    }
+  }
+  return null;
+}
+
+/**
+ * Converts array to CSV.
+ */
+function custom_reports_array_to_csv($rows, $header) {
+  $output = '';
+  if ($header) {
+    array_unshift($rows, array_keys($rows[0]));
+  }
+  foreach ($rows as $key1 => $value1) {
+    $row = array();
+    foreach ($value1 as $key2 => $value2) {
+      if (preg_match("/^ |\n|,|\"| $/", $value2)) {
+        $value2 = '"' . str_replace('"', '""', $value2) . '"';
+      }
+      $row[] = $value2;
+    }
+    $output .= implode(',', $row) . "\n";
+  }
+  return $output;
+}
+
+/**
+ * Downloads a CSV file.
+ */
+function custom_reports_download_csv($output, $filename) {
+  // Download CSV
+  drupal_set_header('Content-Type: text/csv');
+  drupal_set_header('Content-Disposition: attachment; filename="' . str_replace('"', '', $filename) . '"');
+  drupal_set_header('Cache-Control: private');
+  echo $output;
+  exit;
+}

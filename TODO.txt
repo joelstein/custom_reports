@@ -1,0 +1,14 @@
+THIS RELEASE
+- custom report form fields
+  - don't allow these to be required, but instead validate required ones in a custom callback
+    - well, if they are required, it doesn't seem to cause any problem... weird!
+
+FUTURE RELEASE
+- make history page a little more intuitive
+- ability to view report results in (sortable) table
+  - same for those stored in history
+- for stored reports, show the date and time of the last saved file
+  - would be nice to show this as a #description per option... is that possible? (or in a table)
+- possibly make List page a table, with the following columns:
+  [] (radio) | Report Title | Last Generated (w/ link to stored page)
+- consider merging with "customreports" module

@@ -1,0 +1,4 @@
+name = Custom Reports
+description = Reporting API and UI for custom reports.
+core = 6.x
+dependencies[] = token
