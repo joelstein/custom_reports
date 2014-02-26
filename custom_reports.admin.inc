@@ -165,6 +165,10 @@ function custom_reports_get_reports() {
     if (!isset($report['filename'])) {
       $report['filename'] = '[date] [title].csv';
     }
+    // Set default date format.
+    if (!isset($report['date_format'])) {
+      $report['date_format'] = 'Y-m-d';
+    }
     // Store defaults to FALSE
     if (!isset($report['store'])) {
       $report['store'] = FALSE;
@@ -189,7 +193,7 @@ function custom_reports_get_reports() {
 function custom_reports_token_values($type, $object = NULL) {
   if ($type == 'custom_reports') {
     $report = $object;
-    $tokens['date'] = date('Y-m-d');
+    $tokens['date'] = date($report['date_format']);
     $tokens['title'] = $report['title'];
     foreach ($report['args'] as $key => $value) {
       if (is_array($value)) {

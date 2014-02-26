@@ -44,6 +44,9 @@ should return an array of reports with the following keys:
   "[year]" will be replaced with that form element's value. If the form value
   is an array, it will be concatenated with hypens (-).
 
+- **date_format**: If the [date] token is used in the filename, it will be
+  formatted as "Y-m-d", unless you set this to another format.
+
 - **store**: TRUE if a copy of your report should be stored on the file server
   for future reference, or FALSE if your report should be downloadable only
   (defaults to FALSE).
