@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function custom_reports_menu() {
   $items['admin/reports/custom'] = array(
@@ -28,7 +28,7 @@ function custom_reports_menu() {
 }
 
 /**
- * Implementation of hook_file_download().
+ * Implements hook_file_download().
  */
 function custom_reports_file_download($filepath) {
   // Serve up reports to users with proper permission
@@ -44,6 +44,24 @@ function custom_reports_file_download($filepath) {
     }
   }
   return null;
+}
+
+/**
+ * Implements hook_token_values().
+ */
+function custom_reports_token_values($type, $object = NULL) {
+  if ($type == 'custom_reports') {
+    $report = $object;
+    $tokens['date'] = date($report['date_format']);
+    $tokens['title'] = $report['title'];
+    foreach ($report['args'] as $key => $value) {
+      if (is_array($value)) {
+        $value = join('-', $value);
+      }
+      $tokens[$key] = $value;
+    }
+    return $tokens;
+  }
 }
 
 /**

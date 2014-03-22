@@ -188,24 +188,6 @@ function custom_reports_get_reports() {
 }
 
 /**
- * Implementation of hook_token_values().
- */
-function custom_reports_token_values($type, $object = NULL) {
-  if ($type == 'custom_reports') {
-    $report = $object;
-    $tokens['date'] = date($report['date_format']);
-    $tokens['title'] = $report['title'];
-    foreach ($report['args'] as $key => $value) {
-      if (is_array($value)) {
-        $value = join('-', $value);
-      }
-      $tokens[$key] = $value;
-    }
-    return $tokens;
-  }
-}
-
-/**
  * Displays list of previously generated reports.
  * Downloadable via system file download only.
  */
